@@ -24,4 +24,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 * [Apartments.com](https://www.apartments.com/) for the data!
-* [Eutopia][http://www.liveeutopia.com/) apartment search for the inspiration
+* [Eutopia](http://www.liveeutopia.com/) Apartment Search for the inspiration
