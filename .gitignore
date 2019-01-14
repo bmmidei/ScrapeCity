@@ -107,4 +107,4 @@ venv.bak/
 .idea/
 
 # MacOS Finder Config Files
-.DS_Store
+*.DS_Store
