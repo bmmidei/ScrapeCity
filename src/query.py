@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup as BS
-from src.parse import parse_availTable
+from src.parse import parse_availTable, parse_bldgMeta
 import requests
 
 
@@ -55,14 +55,15 @@ def get_apartments(url):
     page = requests.get(url, headers=req_headers)
     soup = BS(page.content, 'html.parser')
 
-    # Extract the bldg id (unique to each apartment building)
+    # Extract the bldg id and building information(unique to each apartment building)
     bldg_id = soup.find('main', attrs={'data-listingid':True})['data-listingid']
+    bldg_meta = parse_bldgMeta(soup, bldg_id)
 
     # Examine the availability table
     table = soup.find("table", {"class": "availabilityTable"})
     apt_info = parse_availTable(table, bldg_id)
 
-    return apt_info
+    return bldg_meta, apt_info
 
 '''
 def building(url):

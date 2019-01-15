@@ -91,6 +91,35 @@ def parse_area(apt):
 
     return (min_area, max_area)
 
-def parse_bldgInfo(soup):
-    # TODO
-    return None
+def parse_bldgMeta(soup, bldg_id):
+    bldg_meta = {}
+    bldg_meta['bldg_id'] = bldg_id
+
+    # Extract location info
+    loc = soup.find('div', {'class':'propertyLocation'})
+    name = loc.find('h1', {'class':'propertyName'}).get_text().strip()
+    bldg_meta['name'] = name
+
+    # Extract address information
+    address = parse_address(loc.find('div',{'class':'propertyAddress'}))
+    bldg_meta.update(address)
+
+    return bldg_meta
+
+def parse_address(addr_soup):
+    # Extract street address and neighborhood
+    addr = addr_soup.find_all('span')
+    addr = [item.get_text() for item in addr]
+
+    address = {}
+    address['street'] = addr[0]
+    address['city'] = addr[1]
+    address['state'] = addr[2]
+    address['zip'] = addr[3]
+
+    nb_hood = addr_soup.find('a', {'class':'neighborhood'}).get_text()
+    address['nb_hood'] = nb_hood
+
+    # Returns a dictionary containing street address, city, state, zip,
+    # and neighborhood
+    return address
