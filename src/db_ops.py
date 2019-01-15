@@ -42,7 +42,7 @@ def add_apt(conn, apt):
     """
     Add new apt to apts table
     :param conn: sql connection
-    :param apts: apts table
+    :param apts: apts dict
     :return: None
     """
     apt_info = (apt['rentalkey'],
@@ -61,6 +61,55 @@ def add_apt(conn, apt):
         try:
             c = conn.cursor()
             c.execute(sql, apt_info)
+        except Error as e:
+            print(e)
+
+    return None
+
+def create_bldg_table(conn):
+    ''' Create the building metadata sql table if it doesn't exist
+    :param conn: Connection object
+    :return: None 
+    '''
+    sql = '''CREATE TABLE IF NOT EXISTS bldg_meta(
+                bldg_id text PRIMARY KEY,
+                name text,
+                street text,
+                city text,
+                state text,
+                zip text,
+                nb_hood text
+                );'''
+    # Context manager for executing sql
+    with conn:
+        try:
+            c = conn.cursor()
+            c.execute(sql)
+        except Error as e:
+            print(e)
+
+def add_bldg_meta(conn, bldg_meta):
+    """
+    Add new bldg to bldg table
+    :param conn: sql connection
+    :param bldg_meta: building metadata dict
+    :return: None
+    """
+    bldg_info = (bldg_meta['bldg_id'],
+                 bldg_meta['name'],
+                 bldg_meta['street'],
+                 bldg_meta['city'],
+                 bldg_meta['state'],
+                 bldg_meta['zip'],
+                 bldg_meta['nb_hood'])
+    sql = ''' INSERT INTO bldg_meta(bldg_id, name, street, city, state, zip, nb_hood)
+              VALUES(?,?,?,?,?,?,?) '''
+
+    # Context manager for executing sql
+    with conn:
+        try:
+            c = conn.cursor()
+            c.execute(sql, bldg_info)
         except Error as e:
             print(e)
 
